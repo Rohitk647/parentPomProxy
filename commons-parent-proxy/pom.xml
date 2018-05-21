@@ -38,13 +38,16 @@
                 <options>update</options>
                 <apigee.env>test</apigee.env>
                 <apigee.hosturl>https://api.enterprise.apigee.com</apigee.hosturl>
+                
                 <apigee.apiversion>v1</apigee.apiversion>
                 <apigee.org>${org}</apigee.org>
                 <apigee.username>${username}</apigee.username>
                 <apigee.password>${password}</apigee.password>
+                
                 <apigee.options>${options}</apigee.options>
                 <apigee.revision>${revision}</apigee.revision>
             </properties>
+            
             <build>
             <plugins>
             <plugin>
