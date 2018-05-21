@@ -1,0 +1,172 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.usga.api.commons</groupId>
+    <artifactId>parent-pom</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>parent-pom</name>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <name>Maven Plugin Repository</name>
+            <url>http://repo1.maven.org/maven2</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
+    <properties>
+            <main.basedir>${project.basedir}</main.basedir>
+    </properties>
+
+
+    <profiles>
+ 
+    <!--  Proxy deployment profile-->
+       
+        <profile>
+            <id>qa</id>
+            <properties>
+                <org>${org}</org>
+                <options>update</options>
+                <apigee.env>test</apigee.env>
+                <apigee.hosturl>https://api.enterprise.apigee.com</apigee.hosturl>
+                <apigee.apiversion>v1</apigee.apiversion>
+                <apigee.org>${org}</apigee.org>
+                <apigee.username>${username}</apigee.username>
+                <apigee.password>${password}</apigee.password>
+                <apigee.options>${options}</apigee.options>
+                <apigee.revision>${revision}</apigee.revision>
+            </properties>
+            <build>
+            <plugins>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>2.5</version>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <overwrite>true</overwrite>
+                            <encoding>UTF-8</encoding>
+                             <echo message="basedir parent : ${basedir}"/>
+                            <outputDirectory>${basedir}/target/apiproxy</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>apiproxy</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>io.apigee.build-tools.enterprise4g</groupId>
+                <artifactId>apigee-edge-maven-plugin</artifactId>
+                <version>1.1.6</version>    
+                <executions>
+                    <execution>
+                        <id>configure-bundle</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>configure</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>deploy-bundle</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <plugin>
+                <groupId>com.apigee.edge.config</groupId>
+                <artifactId>apigee-config-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>create-config-cache</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>caches</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>create-config-targetserver</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>targetservers</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>create-config-kvm</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>keyvaluemaps</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            </plugins>
+            </build>
+        </profile>
+        
+        
+<!--  smartdocs deployment profile-->
+       
+       
+        <profile>
+            <id>smartdocs</id>
+            <properties>
+               <portal.username>${username}</portal.username>
+               <portal.password>${password}</portal.password>
+                <portal.directory>${project.basedir}/specs</portal.directory>
+                <portal.url>https://dev-usga.devportal.apigee.io</portal.url>
+                <portal.path>devportal</portal.path>
+                <portal.cronkey>${cronkey}</portal.cronkey>
+                <portal.format>yaml</portal.format>
+            </properties>
+            
+            <build>
+                <plugins>
+                    <plugin>
+                <groupId>com.apigee.smartdocs.config</groupId>
+                <artifactId>apigee-smartdocs-maven-plugin</artifactId>
+                <version>1.0.1</version>
+                
+                <executions>
+                    <execution>
+                        <id>smartdocs-deploy</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>apimodel</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+                </plugins>
+            </build>
+        </profile>
+        
+    </profiles>
+</project>
