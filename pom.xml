@@ -6,7 +6,7 @@
     <artifactId>parent-pom-proxy</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
-    <name>parent-pom</name>
+    <name>parent-pom-proxy</name>
 
     <pluginRepositories>
         <pluginRepository>
