@@ -39,6 +39,7 @@
                 <apigee.username>${username}</apigee.username>
                 <apigee.password>${password}</apigee.password>
                 <apigee.options>${options}</apigee.options>
+                <apigee.override.delay>10</apigee.override.delay>
                 <apigee.revision>${revision}</apigee.revision> <!-- used while trying to update revision, use when option=update only -->
             </properties>
         
